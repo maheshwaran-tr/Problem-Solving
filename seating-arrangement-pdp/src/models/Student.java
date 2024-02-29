@@ -1,5 +1,7 @@
 package models;
 
+
+//student model
 public class Student {
 
     public String regNo;
@@ -9,5 +11,6 @@ public class Student {
         this.regNo = regNo;
         this.dept = dept;
     }
+    
 
 }

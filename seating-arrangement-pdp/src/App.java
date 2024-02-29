@@ -26,14 +26,16 @@ public class App {
             students.add(new Student("921721115007", "CSD"));
             students.add(new Student("921721115008", "CSD"));
             students.add(new Student("921721115009", "CSD"));
-            students.add(new Student("921721115010", "CSD"));
+            students.add(new Student("921721115011", "CSD"));
+            students.add(new Student("921721115012", "CSD"));
+            students.add(new Student("921721115013", "CSD"));
+            students.add(new Student("921721115014", "CSD"));
 
             List<Room> examHalls = new ArrayList<>();
             examHalls.add(new Room("H1", rows, cols, 3));
             examHalls.add(new Room("H2", rows, cols, 3));
             arrangeSeats(students, examHalls);
-            // List<Room> arrangedRooms = arrangeSeats(students, examHalls);
-            // System.out.println(arrangedRooms.size());
+
             for (Room hall : examHalls) {
                 System.out.println("****************************");
                 System.out.println(" HALL NUMBER : " + hall.hallNo);
@@ -57,34 +59,40 @@ public class App {
 
     static void arrangeSeats(List<Student> studentList, List<Room> examHallList) {
         boolean isArrangeble = check(studentList, examHallList);
-        System.out.println(isArrangeble);
 
         if (isArrangeble) {
             int hallIndex = 0;
             for (Student theStudent : studentList) {
-                System.out.println(theStudent.regNo);
                 Room hall = examHallList.get(hallIndex);
                 if (hall.totalNoOfSeats > 0) {
-                    perform(hall,theStudent);
+                    boolean isArranged = perform(hall,theStudent);
+                    if(!isArranged){
+                        hallIndex = (hallIndex + 1) % examHallList.size();
+                        hall = examHallList.get(hallIndex);
+                        perform(hall,theStudent);
+                    }
                 } else {
                     hallIndex = (hallIndex + 1) % examHallList.size();
+                    hall = examHallList.get(hallIndex);
+                    perform(hall,theStudent);
                 }
             }
         }
         return;
     }
 
-    static int[] perform(Room hall,Student theStudent){
+    static boolean perform(Room hall,Student theStudent){
         for (int col = 0; col <= (hall.cols)- hall.seatPerBench; col += hall.seatPerBench) {
             for (int row = 0; row < hall.rows; row++) {
                 if (hall.hallMatrix[row][col].student == null) {
                     hall.hallMatrix[row][col].student = theStudent;
                     hall.totalNoOfSeats -= 1;
-                    return new int[] {2,2};
+                    return true;
                 }
             }
         }
-        return new int[] {0,0};
+        return false;
+
     }
     
 
